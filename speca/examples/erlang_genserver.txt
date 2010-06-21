@@ -1,0 +1,38 @@
+.. Erlang genserver template for speca 
+
+
+.. options:: 
+   :lang: erlang
+
+..
+   :outdir: .
+
+
+.. module:: gensample
+   :doc: This is a gensample module (Erlang genserver)
+   :author: selead
+   :author-email: allselead@gmail
+   :genserver:
+   :supervisor:
+
+
+  .. func:: sum
+     :doc: Функция для сложения двух чисел         
+     :param a int: Первое слагаемое
+     :param b: Второе слагаемое
+     :return c: Сумма двух чисел
+
+  .. func:: inc
+     :doc: Функция инкремента
+     :param a: Число для инкремента
+     :return b: Результат
+
+  .. func:: dec
+     :doc: Функция декремента
+     :param a: Число для декремента
+     :return b: Результат
+
+
+
+
+   
