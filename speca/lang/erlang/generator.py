@@ -58,6 +58,11 @@ def get_module_functions(module_directive):
             functions.append(fun)
     return functions
 
+def create_records(module_directive, folder):
+    """
+    Creates records in special header file
+    """
+#  TODO add code here
 
 def get_export_functions(functions):
     """
@@ -136,9 +141,6 @@ def generate_genserver(directive, functions, folder):
         f.close()
         print 'Create file %s' % f_name
 
-def generate_supervisor(directive, functions):
-    pass
-
 def generate(directives, filename):
     """
     Function, that generates code in Erlang
@@ -161,6 +163,9 @@ def generate(directives, filename):
                 raise EmptyModuleNameException('module name can\'t be empty [%s]' % filename)
 
             functions = get_module_functions(d)
+
+            # create hrl file, if needed
+            create_records(d, e_dir)
 
             # read module and write it down
             if get_directive_option(d, 'genserver'): # make genserver

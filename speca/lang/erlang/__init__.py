@@ -334,6 +334,11 @@ init([]) ->
     {ok,{{?RMS, ?MAXR, ?MAXT}, ChildSpecs}}.
 
 """
+
+HEADER_TEMPLATE="
+{{{records}}}
+"
+
 FUNC_DOC_HL =  '%%'+'-'*78 + '\n'
 SET_VAR = '"Set this var!"'
 
