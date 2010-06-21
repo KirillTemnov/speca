@@ -1,23 +1,35 @@
 #!/usr/bin/env python 
 # -*- coding: utf-8 -*-   
 
-# autocomplete ?
-
 from  speca.commands import get_command
 import sys
+from optparse import OptionParser
 
-def main(init_arg=None):
-    if init_arg is None:
-        init_arg = sys.argv[1:]
-    # autocomplete
+usage = """usage: %prog cmd filename
 
-    command = init_arg[0]
-    cmd = get_command(command)
+Commands:
+  gen       Generate specifications using file.
+  test      Test command.
+"""
 
-    if cmd:
-        cmd.run(cmd_line_args=init_arg[1:])
+parser = OptionParser(usage=usage)
+
+def main(init_args=None):
+    if init_args is None:
+        init_args = sys.argv[1:]
+
+    (options, args) = parser.parse_args(init_args)
+    
+    if len(args) == 2:
+        cmd = get_command(args[0])
+        if not cmd:
+            print 'unknown command'
+            print usage
+        else:
+            cmd.run(cmd_line_args=[args[1]])
     else:
-        print 'Command not found!'
+        print usage
+
 
 
 def import_module(name):
