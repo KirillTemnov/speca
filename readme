@@ -1,0 +1,21 @@
+Speca is a code generator
+=========================
+
+Speca create templates as described in specification files.
+
+Specification files are in reStructuredText format, can be found in examples folder.
+
+**For now speca only generates code in Erlang.**
+
+
+Installing
+----------
+
+easy_install speca.tar.gz
+
+
+Using
+-----
+
+$ speca gen specification.rst
+ 
