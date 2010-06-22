@@ -4,10 +4,11 @@ GEN_SERVER_TEMPLATE = \
 %%% Author        : {{author}} <{{author_email}}>
 %%% Description   : {{description}}
 %%%
-%%% Created       : {{date}}
+%%% Created       : {{date}} by speca generator.
 %%%-----------------------------------------------------------------------------
 -module({{module_name}}).
 
+{{header_files}}
 -behaviour(gen_server).
 
 %%------------------------------------------------------------------------------
@@ -126,11 +127,13 @@ FSM_TEMPLATE = \
 %%% Author        : {{author}} <{{author_email}}>
 %%% Description   : {{description}}
 %%%
-%%% Created       : {{date}}
+%%% Created       : {{date}} by speca generator.
 %%%-----------------------------------------------------------------------------
 -module({{module_name}}).
 
 -behaviour(gen_fsm).
+
+{{header_files}}
 
 %% API
 -export([start_link/0]).
@@ -335,9 +338,6 @@ init([]) ->
 
 """
 
-HEADER_TEMPLATE="
-{{{records}}}
-"
 
 FUNC_DOC_HL =  '%%'+'-'*78 + '\n'
 SET_VAR = '"Set this var!"'

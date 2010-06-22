@@ -5,8 +5,8 @@ Erlang code generator
 from speca.lang.erlang import GEN_SERVER_TEMPLATE, FSM_TEMPLATE, SUPERVISOR_TEMPLATE, \
     FUNC_DOC_HL, SET_VAR, ErlangOptionsException, AssignToExistingVariableException
 from speca.lang import EmptyModuleNameException
-from speca.parser import find_options, get_directive_option, get_func_params, \
-    get_return_param, substitute, Func, FuncParam, DEFAULT_MODULE_OPTIONS
+from speca.parser import find_options, get_directive_option, get_params, \
+    get_return_param, substitute, Func, FuncParam, Struct, DEFAULT_MODULE_OPTIONS
 import os, sys
 from datetime import datetime
 
@@ -45,23 +45,32 @@ def can_generate(options):
 
 def get_module_functions(module_directive):
     """
-    Get list of :class: `Func` objects, belonging to module_directive.
+    Get list of :class: `Func` objects, from module_directive.
     """
     functions = []
     for f in module_directive.childs:
         if f.directive == 'func':
             fun = Func(f.value, doc=get_directive_option(f, 'doc'), \
                            store_optional_params_in_list=True)
-            for fp in get_func_params(f): 
+            for fp in get_params(f): 
                 fun.add_param(fp)
             fun.returns = get_return_param(f)
             functions.append(fun)
     return functions
 
-def create_records(module_directive, folder):
+def get_records(module_directive, folder):
     """
-    Creates records in special header file
+    Return list of :class: `Struct` objects from module_directive.
     """
+    records = []
+    for r in module_directive.childs:
+        if r.directive == 'struct':
+            s = Struct(r.value, doc=get_directive_option(r, 'doc'))
+            for param in get_params(r):
+                s.add_param(param)
+            records.append(s)
+    return records
+
 #  TODO add code here
 
 def get_export_functions(functions):
@@ -116,7 +125,10 @@ def get_handle_call_functions(functions):
             handle_call_functions += u'    {reply, ok, State}; \n\n'
     return handle_call_functions
 
-def generate_genserver(directive, functions, folder):
+def generate_genserver(directive, functions, records, folder):
+    """
+    Generate genserver files from functions and records lists.
+    """
     d = directive
     params = dict(module_name=d.value, author=get_directive_option(d, 'author'),\
                       author_email=get_directive_option(d, 'author-email'), \
@@ -126,6 +138,32 @@ def generate_genserver(directive, functions, folder):
                       proxy_functions=get_proxy_functions(functions), \
                       handle_call_functions=get_handle_call_functions(functions))
     params.update(ERLANG_MODULE_OPTIONS)
+    if records:                 # make hrl file
+        header_file = '%s.hrl' % d.value
+        params['header_files'] = '-include("%s").' % header_file
+        header_file = os.path.join(folder, header_file)
+        records_string = u''
+        for r in records:
+            if len(r.params) == 0:
+                print 'Warning: record %s has no fields, skip it...' % r.name
+                continue 
+
+            records_string += FUNC_DOC_HL + u'%% ' + r.doc + u'\n'
+            for p in r.params:
+                records_string += u'%%%% %s : %s\n' % (make_erlang_var(p.name), p.doc)
+            records_string += FUNC_DOC_HL
+            records_string += u'-record(%s, {%s}).\n\n' % \
+                (r.name, u', '.join([make_erlang_var(x.name) for x in r.params]))
+
+        if records_string:
+            f = open(header_file, 'wb')
+            f.write(records_string.encode('utf-8'))
+            f.close()
+            print 'Create file %s' % header_file
+        else:
+            print 'Header file %s was not prodused. ' % header_file
+            del params['header_files']
+
     f_name = os.path.join(folder, '%s.erl' % d.value)
     f = open(f_name, 'wb')
     unicode_string = substitute(GEN_SERVER_TEMPLATE, params) 
@@ -140,6 +178,7 @@ def generate_genserver(directive, functions, folder):
         f.write(unicode_string.encode('utf-8'))
         f.close()
         print 'Create file %s' % f_name
+
 
 def generate(directives, filename):
     """
@@ -165,11 +204,11 @@ def generate(directives, filename):
             functions = get_module_functions(d)
 
             # create hrl file, if needed
-            create_records(d, e_dir)
+            records = get_records(d, e_dir)
 
             # read module and write it down
             if get_directive_option(d, 'genserver'): # make genserver
-                generate_genserver(d, functions, e_dir)
+                generate_genserver(d, functions=functions, records=records, folder=e_dir)
                     
 
             elif get_directive_option(d, 'fsmserver'): # make fsm server

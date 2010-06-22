@@ -229,7 +229,7 @@ def get_directive_option(directive, option, default=None):
                 return o.value
     return default
 
-def get_func_params(directive):
+def get_params(directive):
     params = []
     if isinstance(directive, Directive):
         for d_option in directive.options:
@@ -315,6 +315,32 @@ class Func:
     def __str__(self):
         params = [p.name for p in self.__params]
         return u'%s (%s) -> %s \n doc: %s\n' % (self.name, ', '.join(params), self.returns, self.doc)
+
+class Struct:
+    """
+    Data structure description.
+    Format:
+      .. struct:: name
+         :doc: Struct docs
+         :param param1: Param1 doc.
+         :param param2: Param2 doc.
+    """
+    def __init__(self, name, doc=''):
+        self.name = name
+        self.doc = doc
+        self.__params = []
+
+    def add_param(self, param):
+        if isinstance(param, FuncParam):
+            self.__params.append(param)
+
+    def __repr__(self):
+        return u'<speca.parser.Struct %s>' % self.name
+
+    @property
+    def params(self):
+        return self.__params
+
 
 class Options:
       """
