@@ -1,5 +1,5 @@
-#!/usr/bin/env python 
-# -*- coding: utf-8 -*-   
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Parser for pseudo-code api file in reST format
 
@@ -19,7 +19,7 @@ file sample:
 
 .. class:: Class
    :doc: Class docstring
-  
+
    .. method:: method1
       :doc: Method docstring
       :param1: Param1 description
@@ -71,7 +71,7 @@ def is_comment(string):
     """
     Check if string is reST comment
     """
-    return COMMENT_RE.match(string) and True or False 
+    return COMMENT_RE.match(string) and True or False
 
 def get_directive_from_string(string):
     return DIRECTIVE_RE.search(string)
@@ -106,7 +106,7 @@ class Directive:
         self.childs = []
         self.parent = parent
         self.indent = indent
-        
+
     def princ(self):
         """
         Debug print function
@@ -145,13 +145,13 @@ def read_blocks(filename):
 def parse_block(lines, index=0, directive=None, default_param_value='true'):
     """
     Parse block and returns instance of :class: `Directive` object
-    
+
     :param lines: lines of block.
     :param index: line index.
     :param directive: directive, uses for recursive call.
-    :param default_param_value: default value for directive option 
+    :param default_param_value: default value for directive option
     """
-    if index >= len(lines):      # 
+    if index >= len(lines):      #
         return directive
 
     if lines[index].strip() == '':
@@ -196,7 +196,7 @@ def parse_block(lines, index=0, directive=None, default_param_value='true'):
         parse_block(lines, index+1, directive, default_param_value)
     else:                       # skip comments and other objects
         parse_block(lines, index+1, directive, default_param_value)
-    return directive            
+    return directive
 
 def parse_file(filename):
     """
@@ -217,7 +217,7 @@ def find_options(directives, def_opts=DEFAULT_MODULE_OPTIONS):
     for d in directives:
         if d.directive == u'options':
             return Options.from_directive(d, def_opts)
-    return None 
+    return None
 
 def get_directive_option(directive, option, default=None):
     """
@@ -247,7 +247,7 @@ def get_return_param(directive):
             m = RETURN_RE.search(_str)
             if m:
                 return FuncParam(name=m.group('name'), doc=m.group('doc'), ptype=m.group('type'))
-    return None 
+    return None
 
 def substitute(content, target_dict, ommited=''):
     """
@@ -281,10 +281,10 @@ class Func:
     def __init__(self, name, doc='', store_optional_params_in_list=False):
         self.name = name
         self.__params = []
-        self.returns = None 
+        self.returns = None
         self.doc = doc
         self.store_in_list = store_optional_params_in_list
-    
+
     def add_param(self, param):
         if isinstance(param, FuncParam):
             self.__params.append(param)
@@ -348,12 +348,12 @@ class Options:
       """
       def __init__(self, opts={}):
           self.__opts = opts
-          
+
       @classmethod
       def from_directive(self, directive, def_opts):
           o = Options(def_opts)
           for opt in directive.options:
-              o.add_option(opt.name, opt.value)
+              o.replace_option(opt.name, opt.value)
           return o
 
       def add_option(self, key, value):
@@ -370,4 +370,7 @@ class Options:
 
       def get_option(self, key, default=u''):
           return self.__opts.get(key, default)
+
+      def __repr__(self):
+          return u'<speca.parser.Options: %s >' % self.__opts
 

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-   
+# -*- coding: utf-8 -*-
 """
 Erlang code generator
 """
@@ -13,7 +13,7 @@ from datetime import datetime
 # start_mode : local of global (default)
 # restarting_mode_strategy: one_for_one,  rest_for_one, simpleone_for_one, one_for_all(default)
 # max_restarts: number of attemps, default: 10
-# time_limit_on_restarts: number of restarts(default=5) in seconds. 
+# time_limit_on_restarts: number of restarts(default=5) in seconds.
 #                         If during last time_limit_on_restarts seconds
 #                         supervisor restarts its childs is more, than
 #                         time_limit_on_restarts, supervisor craches.
@@ -23,7 +23,7 @@ ERLANG_MODULE_OPTIONS.update(DEFAULT_MODULE_OPTIONS)
 
 def make_erlang_var(var):
     """
-    Make erlang variable from var. 
+    Make erlang variable from var.
     """
     var = var.strip()
     if var.find(' ') > -1:
@@ -33,7 +33,7 @@ def make_erlang_var(var):
     if var.find('-') > -1:
         return ''.join([x.capitalize() for x in var.split('-')])
     return var.capitalize()
-    
+
 
 def can_generate(options):
     """
@@ -52,7 +52,7 @@ def get_module_functions(module_directive):
         if f.directive == 'func':
             fun = Func(f.value, doc=get_directive_option(f, 'doc'), \
                            store_optional_params_in_list=True)
-            for fp in get_params(f): 
+            for fp in get_params(f):
                 fun.add_param(fp)
             fun.returns = get_return_param(f)
             functions.append(fun)
@@ -146,7 +146,7 @@ def generate_genserver(directive, functions, records, folder):
         for r in records:
             if len(r.params) == 0:
                 print 'Warning: record %s has no fields, skip it...' % r.name
-                continue 
+                continue
 
             records_string += FUNC_DOC_HL + u'%% ' + r.doc + u'\n'
             for p in r.params:
@@ -166,7 +166,7 @@ def generate_genserver(directive, functions, records, folder):
 
     f_name = os.path.join(folder, '%s.erl' % d.value)
     f = open(f_name, 'wb')
-    unicode_string = substitute(GEN_SERVER_TEMPLATE, params) 
+    unicode_string = substitute(GEN_SERVER_TEMPLATE, params)
     f.write(unicode_string.encode('utf-8'))
     f.close()
     print 'Create file %s' % f_name
@@ -188,11 +188,14 @@ def generate(directives, filename):
     options = find_options(directives, ERLANG_MODULE_OPTIONS)
     if not can_generate(options):
         raise ErlangOptionsException("Erlang can't generate template for file %s " % filename)
+    print 'Options: %s' % options
     e_dir = options.get_option('out_dir')
     if options.get_option('make_lang_dir'):
         e_dir = os.path.join(e_dir, 'erlang')
-    
+
+    print 'e_dir = %s' % e_dir
     e_dir = os.path.abspath(e_dir)
+    print 'e_dir = %s' % e_dir
     if not os.path.exists(e_dir):
         os.makedirs(e_dir)
     mod_name = ''
@@ -209,7 +212,7 @@ def generate(directives, filename):
             # read module and write it down
             if get_directive_option(d, 'genserver'): # make genserver
                 generate_genserver(d, functions=functions, records=records, folder=e_dir)
-                    
+
 
             elif get_directive_option(d, 'fsmserver'): # make fsm server
                 pass
