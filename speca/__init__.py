@@ -20,7 +20,7 @@ Speca %s - Python generator of templates for projects.
 
 
 parser = OptionParser(usage=usage)
-parser.add_option("-V", "--version", dest="version", default=False, help="Show speca version.")
+parser.add_option("-V", "--version", action="store_true", dest="version", default=False, help="Show speca version.")
 
 
 def main(init_args=None):
