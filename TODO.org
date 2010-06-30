@@ -17,6 +17,7 @@
 ** TODO Write tests.
 
 * BUGS
+** BUG Record fields in Erlang must be as a function names, not variables.
 ** FIXED If record name contans '-' in erlang it woild't translated to '_'.
 ** FIXED If function name contans '-' in erlang it woild't translated to '_'.
 ** FIXED Setting flag make_lang_dir fo 'false' is not affect for creating folder for language.
