@@ -1,26 +1,37 @@
-#!/usr/bin/env python 
-# -*- coding: utf-8 -*-   
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from  speca.commands import get_command
 import sys
 from optparse import OptionParser
 
-usage = """usage: %prog cmd filename
+usage = """usage: speca cmd filename
 
 Commands:
   gen       Generate specifications using file.
-  test      Test command.
+  test      Test command. Use for debug purposes.
 """
 
+VERSION = "0.2.2.2"
+
+version_info = """
+Speca %s - Python generator of templates for projects.
+""" % VERSION
+
+
 parser = OptionParser(usage=usage)
+parser.add_option("-V", "--version", dest="version", default=False, help="Show speca version.")
+
 
 def main(init_args=None):
     if init_args is None:
         init_args = sys.argv[1:]
 
     (options, args) = parser.parse_args(init_args)
-    
-    if len(args) == 2:
+
+    if options.version:
+        print version_info
+    elif len(args) == 2:
         cmd = get_command(args[0])
         if not cmd:
             print 'unknown command'

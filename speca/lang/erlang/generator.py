@@ -188,14 +188,11 @@ def generate(directives, filename):
     options = find_options(directives, ERLANG_MODULE_OPTIONS)
     if not can_generate(options):
         raise ErlangOptionsException("Erlang can't generate template for file %s " % filename)
-    print 'Options: %s' % options
     e_dir = options.get_option('out_dir')
     if options.get_option('make_lang_dir'):
         e_dir = os.path.join(e_dir, 'erlang')
 
-    print 'e_dir = %s' % e_dir
     e_dir = os.path.abspath(e_dir)
-    print 'e_dir = %s' % e_dir
     if not os.path.exists(e_dir):
         os.makedirs(e_dir)
     mod_name = ''
