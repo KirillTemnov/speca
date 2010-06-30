@@ -11,11 +11,43 @@ Specification files are in reStructuredText format, can be found in examples fol
 Installing
 ----------
 
-easy_install speca.tar.gz
+
+Install from source 
+~~~~~~~~~~~~~~~~~~~
+
+1. Download tarball:
+ 
+    wget http://github.com/selead/speca/tarball/master -O speca.tar.gz
+
+or
+
+    curl -L http://github.com/selead/speca/tarball/master --O speca.tar.gz
+
+2. Install 
+   easy_install "speca.tar.gz"
 
 
-Using
------
+Install from python index
+~~~~~~~~~~~~~~~~~~~~~~~~~
+    easy_install speca
+
+or
+
+    pip install speca
+
+
+Install from github via pip
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+pip install -e git://github.com/selead/speca.git#egg=speca
+
+
+Using speca
+-----------
 
 $ speca gen specification.rst
+
+
+For example of specification file see examples folder in source.
+
  
