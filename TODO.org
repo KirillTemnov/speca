@@ -1,15 +1,21 @@
+#+SEQ_TODO: TODO(t) BUG(b) FIXED(f) FROSEN(F) | DONE(d) CANCELED(c) 
 
 * Plans
 
-** Create expamle templates in current folder by a command
+** TODO Create expamle templates in current folder by a command
    $ speca examples
-   will create folder with examples
-** Check if directory/files for templates exists and ask user to overwrite them or not
-** If directory/files exists UPDATE information from specification with delete all others functions or not (flag settings)
-** Pull out information from source files and create rst file (like sphinx do it)
-** Add command line options like :lang: and :out_dir:, that will owerride in-file options
-** Create .app file for Erlang source
-** Create generator for python
-** Create generator for javascript
-** Create REST templates for python + werkzeug
+   will create folder with example
+** TODO Check if directory/files for templates exists and ask user to overwrite them or not.
+** TODO If directory/files exists UPDATE information from specification with delete all others functions or not (flag settings).
+** TODO Pull out information from source files and create rst file (like sphinx do it).
+** TODO Add command line options like :lang:, :out_dir: :make_lang_dir: that will owerride in-file options.
+** TODO Create .app file for Erlang source.
+** TODO Create generator for python.
+** TODO Create generator for javascript.
+** TODO Create REST templates for python + werkzeug.
+** TODO Add speca version to produced files.
+** TODO Write tests.
 
+* BUGS
+** BUG If record name contans '-' in erlang it woild't translated to '_'.
+** BUG If function name contans '-' in erlang it woild't translated to '_'.

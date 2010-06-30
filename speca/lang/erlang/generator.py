@@ -34,6 +34,12 @@ def make_erlang_var(var):
         return ''.join([x.capitalize() for x in var.split('-')])
     return var.capitalize()
 
+def make_erlang_func(var):
+    """
+    Make erlang function or record name from var.
+    """
+    return var.strip().replace(' ', '_').replace('-', '_').lower()
+
 
 def can_generate(options):
     """
@@ -82,7 +88,7 @@ def get_export_functions(functions):
         export_functions = u',\n\t'
         funcs_list = []
         for f in functions:     # TODO single arity!
-            funcs_list.append('%s/%s' % (f.name, f.arity))
+            funcs_list.append('%s/%s' % (make_erlang_func(f.name), f.arity))
         export_functions += u',\n\t'.join(funcs_list)
     return export_functions
 
@@ -94,7 +100,7 @@ def get_proxy_functions(functions):
     for f in functions:
         params_string = u','.join([make_erlang_var(p.name) for p in f.params])
         proxy_functions += FUNC_DOC_HL
-        proxy_functions += u'%% Function:\t%s/%s\n' % (f.name, f.arity)
+        proxy_functions += u'%% Function:\t%s/%s\n' % (make_erlang_func(f.name), f.arity)
         proxy_functions += u'%% Description: %s\n' % (f.doc)
         if f.returns:
             for p in f.params:
@@ -102,11 +108,11 @@ def get_proxy_functions(functions):
                     raise AssignToExistingVariableException('Can\'t assign variable %s [function=%s]' % (make_erlang_var(f.returns.name), f.name))
             proxy_functions += u'%% Returns:\t %s %s\n' % (make_erlang_var(f.returns.name), f.returns.doc)
         proxy_functions += FUNC_DOC_HL
-        proxy_functions += u'%s(%s) ->\n' % (f.name, params_string)
+        proxy_functions += u'%s(%s) ->\n' % (make_erlang_func(f.name), params_string)
         if len(params_string) > 0:
-            proxy_functions += u'    gen_server:call({global, ?SERVER}, {%s, %s}).\n\n' % (f.name, params_string)
+            proxy_functions += u'    gen_server:call({global, ?SERVER}, {%s, %s}).\n\n' % (make_erlang_func(f.name), params_string)
         else:
-            proxy_functions += u'    gen_server:call({global, ?SERVER}, {%s}).\n\n' % f.name
+            proxy_functions += u'    gen_server:call({global, ?SERVER}, {%s}).\n\n' % make_erlang_func(f.name)
 
     return proxy_functions
 
@@ -115,9 +121,9 @@ def get_handle_call_functions(functions):
     for f in functions:
         params_string = u','.join([make_erlang_var(p.name) for p in f.params])
         if len(params_string) > 0:
-            handle_call_functions += u'handle_call({%s, %s}, From, State) ->\n    %% Insert code here\n' % (f.name, params_string)
+            handle_call_functions += u'handle_call({%s, %s}, From, State) ->\n    %% Insert code here\n' % (make_erlang_func(f.name), params_string)
         else:
-             handle_call_functions += u'handle_call({%s}, From, State) ->\n    %% Insert code here\n' % f.name
+             handle_call_functions += u'handle_call({%s}, From, State) ->\n    %% Insert code here\n' % make_erlang_func(f.name)
         if f.returns:
             handle_call_functions += u'    %s = %s,\n    {reply, {ok, %s}, State};\n\n' % \
                 (make_erlang_var(f.returns.name), SET_VAR, make_erlang_var(f.returns.name))
@@ -145,7 +151,7 @@ def generate_genserver(directive, functions, records, folder):
         records_string = u''
         for r in records:
             if len(r.params) == 0:
-                print 'Warning: record %s has no fields, skip it...' % r.name
+                print 'Warning: record %s has no fields, skip it...' % make_erlang_func(r.name)
                 continue
 
             records_string += FUNC_DOC_HL + u'%% ' + r.doc + u'\n'
@@ -153,7 +159,7 @@ def generate_genserver(directive, functions, records, folder):
                 records_string += u'%%%% %s : %s\n' % (make_erlang_var(p.name), p.doc)
             records_string += FUNC_DOC_HL
             records_string += u'-record(%s, {%s}).\n\n' % \
-                (r.name, u', '.join([make_erlang_var(x.name) for x in r.params]))
+                (make_erlang_func(r.name), u', '.join([make_erlang_var(x.name) for x in r.params]))
 
         if records_string:
             f = open(header_file, 'wb')
