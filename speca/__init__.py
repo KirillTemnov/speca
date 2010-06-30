@@ -12,7 +12,7 @@ Commands:
   test      Test command. Use for debug purposes.
 """
 
-VERSION = "0.2.2.2"
+VERSION = "0.2.2.3"
 
 version_info = """
 Speca %s - Python generator of templates for projects.
