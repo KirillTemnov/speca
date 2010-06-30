@@ -1,0 +1,15 @@
+
+* Plans
+
+** Create expamle templates in current folder by a command
+   $ speca examples
+   will create folder with examples
+** Check if directory/files for templates exists and ask user to overwrite them or not
+** If directory/files exists UPDATE information from specification with delete all others functions or not (flag settings)
+** Pull out information from source files and create rst file (like sphinx do it)
+** Add command line options like :lang: and :out_dir:, that will owerride in-file options
+** Create .app file for Erlang source
+** Create generator for python
+** Create generator for javascript
+** Create REST templates for python + werkzeug
+
