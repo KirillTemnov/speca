@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 setup(
     name = "speca",
-    version = "0.2.2.3",
+    version = "0.2.3",
     description = 'Python generator of templates for projects',
     author = 'selead',
     license = 'GPLv2',

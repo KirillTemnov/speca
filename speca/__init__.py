@@ -5,14 +5,14 @@ from  speca.commands import get_command
 import sys
 from optparse import OptionParser
 
-usage = """usage: speca cmd filename
+usage = """usage: speca command filename
 
 Commands:
   gen       Generate specifications using file.
   test      Test command. Use for debug purposes.
 """
 
-VERSION = "0.2.2.3"
+VERSION = "0.2.3"
 
 version_info = """
 Speca %s - Python generator of templates for projects.

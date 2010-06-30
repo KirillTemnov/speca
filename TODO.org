@@ -1,4 +1,4 @@
-#+SEQ_TODO: TODO(t) BUG(b) FIXED(f) FROSEN(F) | DONE(d) CANCELED(c) 
+#+SEQ_TODO: TODO(t) BUG(b) FROSEN(F) | DONE(d) CANCELED(c)  FIXED(f) 
 
 * Plans
 
@@ -17,5 +17,6 @@
 ** TODO Write tests.
 
 * BUGS
-** BUG If record name contans '-' in erlang it woild't translated to '_'.
-** BUG If function name contans '-' in erlang it woild't translated to '_'.
+** FIXED If record name contans '-' in erlang it woild't translated to '_'.
+** FIXED If function name contans '-' in erlang it woild't translated to '_'.
+** FIXED Setting flag make_lang_dir fo 'false' is not affect for creating folder for language.

@@ -195,7 +195,7 @@ def generate(directives, filename):
     if not can_generate(options):
         raise ErlangOptionsException("Erlang can't generate template for file %s " % filename)
     e_dir = options.get_option('out_dir')
-    if options.get_option('make_lang_dir'):
+    if options.get_option('make_lang_dir').strip().lower() in ['false', 'nil']:
         e_dir = os.path.join(e_dir, 'erlang')
 
     e_dir = os.path.abspath(e_dir)
