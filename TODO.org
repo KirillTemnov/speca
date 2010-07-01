@@ -1,7 +1,7 @@
 #+SEQ_TODO: TODO(t) BUG(b) FROSEN(F) | DONE(d) CANCELED(c)  FIXED(f) 
 
 * Plans
-
+** TODO Write tests.
 ** TODO Create expamle templates in current folder by a command
    $ speca examples
    will create folder with example
@@ -14,10 +14,10 @@
 ** TODO Create generator for javascript.
 ** TODO Create REST templates for python + werkzeug.
 ** TODO Add speca version to produced files.
-** TODO Write tests.
 
 * BUGS
 ** BUG Record fields in Erlang must be as a function names, not variables.
+** FIXED If flag make_lang_dir not set, raises exception
 ** FIXED If record name contans '-' in erlang it woild't translated to '_'.
 ** FIXED If function name contans '-' in erlang it woild't translated to '_'.
-** FIXED Setting flag make_lang_dir fo 'false' is not affect for creating folder for language.
+** FIXED Setting flag make_lang_dir to 'false' is not affect for creating folder for language.

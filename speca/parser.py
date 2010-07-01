@@ -65,7 +65,7 @@ INDENT_RE = re.compile('^\s*')
 # default options for parser
 # out_dir - folder for creating templates
 # make_lang_dir - if set to True, each generator creates subfolder with corresponding language name
-DEFAULT_MODULE_OPTIONS = dict(out_dir='.', make_lang_dir=True)
+DEFAULT_MODULE_OPTIONS = dict(out_dir='.', make_lang_dir="true")
 
 def is_comment(string):
     """
